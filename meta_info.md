@@ -8,12 +8,12 @@
 |   Swap    |   [SWAP]    |  4G  |
 |   Root    |    /mnt     | Rest |
 
-> ![NOTE]
+> [!IMPORTANT]
 > Make sure to mount the root partition before mounting the boot partition.
 
 ## Locale
 
-en\_US-UTF-8
+en\_US.UTF-8
 
 ## Packages
 
@@ -29,23 +29,23 @@ Boot manager: grub
 
 ### Full Package List
 
-> ![NOTE]
+> [!NOTE]
 > Dependencies are not listed
 
-asciiquarium
-cbonsai
-cmatrix
-foot
-git
-gnome
-grub
-man-db
-man-pages
-neofetch
-networkmanager
-texinfo
-vim
-wayland
+asciiquarium \
+cbonsai \
+cmatrix \
+foot \
+git \
+gnome \
+grub \
+man-db \
+man-pages \
+neofetch \
+networkmanager \
+texinfo \
+vim \
+wayland \
 yay
 
 ## Gnome Settings
@@ -88,7 +88,7 @@ yay
 
 ### Extensions
 
-Places Status Indicator > On
-System Monitor > On
-windowNavigator > On
+- Places Status Indicator > On
+- System Monitor > On
+- windowNavigator > On
 
