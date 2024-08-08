@@ -154,7 +154,7 @@ pacman -S gnome
 # seahorse - password and key manager
 pacman -S gnome-recipes gnome-sound-recorder gnome-tweaks seahorse
 
-pacman -S ttf-jetbrains-mono-nerd
+pacman -S ttf-jetbrains-mono-nerd libsixel
 
 # this is necessary
 pacman -S --noconfirm neofetch > "${redirect_file}" && neofetch
