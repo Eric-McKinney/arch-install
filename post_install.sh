@@ -146,6 +146,7 @@ pacman -Syu
 
 pacman -S gnome
 # exclude gnome-tour, gvfs-afc, gvfs-dnssd, gvfs-goa, gvfs-onedrive, orca, simple-scan
+systemctl enable gdm
 
 # from gnome-extra:
 # gnome-recipes - literally food recipes
