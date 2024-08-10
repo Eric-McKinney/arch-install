@@ -100,7 +100,7 @@ grub-install "${disk}"
 grub-mkconfig -o /boot/grub/grub.cfg
 ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
 hwclock --systohc
-sed -ri 's/# (en_US.UTF-8 UTF-8)/\1/' /etc/locale.gen
+sed -ri 's/#(en_US.UTF-8 UTF-8)/\1/' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 echo "hostname" > /etc/hostname
