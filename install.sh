@@ -76,7 +76,26 @@ rest_part="${disk}"3
 timedatectl set-ntp true
 
 # supposedly sfdisk is best for scripting, but fdisk will also work (cfdisk is a user friendly tui)
-cfdisk "${disk}"
+#cfdisk "${disk}"
+fdisk "${disk}" <<ENDCMDS
+o
+n
+p
+1
+
++512M
+n
+p
+2
+
++4G
+n
+p
+3
+
+
+w
+ENDCMDS
 # 512M for bootable partition (grub, initramfs, other kernel shit possibly)
 # 4G for swap
 # rest for everything else (root partition)
