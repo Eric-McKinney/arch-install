@@ -19,13 +19,15 @@ en\_US.UTF-8
 
 ### Notable Packages
 
-Display manager (login screen): gdm
-Desktop environment: Gnome
-Display server: Wayland
-Window manager: hyprland (?)
-Terminal emulator: foot
-Text editor: vim (looking into nvim)
-Boot manager: grub
+| Package                        | Name    |
+|--------------------------------|:-------:|
+| Display manager (login screen) | gdm     |
+| Desktop environment            | gnome   |
+| Display server                 | wayland |
+| Window manager                 | mutter  |
+| Terminal emulator              | foot    |
+| Text editor                    | vim     |
+| Boot manager                   | grub    |
 
 ### Full Package List
 
