@@ -35,15 +35,15 @@ fi
 
 while [ ${#} -ne 1 ]
 do
-  current_opt="${1}"
-  case "${current_opt}" in
+  curr_opt="${1}"
+  case "${curr_opt}" in
     --help|-h|-?)
       usage
       exit 0
       ;;
 
     -*)
-      echo "ERROR: unrecognized option \"${current_opt}\""
+      echo "ERROR: unrecognized option \"${curr_opt}\""
       short_usage
       exit 1
       ;;
@@ -165,11 +165,11 @@ err_check
 
 echo "Building filesystems..."
 echo -n "  Creating fat32 on ${boot_part}..."
-mkfs.fat -F 32 "${boot_part}" > /dev/null; err_check
+mkfs.fat -F 32 "${boot_part}" > /dev/null 2>&1; err_check
 echo -n "  Creating swap on ${swap_part}..."
-mkswap "${swap_part}" > /dev/null; err_check
+mkswap "${swap_part}" > /dev/null 2>&1; err_check
 echo -n "  Creating ext4 on ${rest_part}..."
-mkfs.ext4 "${rest_part}" > /dev/null; err_check
+mkfs.ext4 "${rest_part}" > /dev/null 2>&1; err_check
 echo -ne "\033[s\033[4A\033[23Cdone\033[u"
 
 echo "Mounting partitions..."
