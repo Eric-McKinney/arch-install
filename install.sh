@@ -216,6 +216,7 @@ systemctl enable NetworkManager > /dev/null 2>&1; err_check
 echo -n "Installing grub..."
 grub-install "${disk}" > /dev/null 2>&1; err_check
 echo -n "Configuring grub theme..."
+mv /root/img/dell-thunder.jpg /boot/grub/themes
 sed -ri 's|#(GRUB_BACKGROUND)=".*"|\1="/boot/grub/themes/dell-thunder.jpg"|' /etc/default/grub
 err_check
 echo -n "Making grub config..."
@@ -249,6 +250,11 @@ ${user_password}
 ENDPASS
 err_check
 
+echo -n "Changing ownership of wallpapers..."
+chown -R user:user /root/img; err_check
+echo -n "Moving wallpapers to user's home directory..."
+mv /root/img /home/user; err_check
+
 echo -n "Backing up /etc/sudoers..."
 cp /etc/sudoers /etc/sudoers.bak; err_check
 echo -n "Setting wheel sudo permissions..."
@@ -268,6 +274,7 @@ makepkg -si --noconfirm
 
 echo "Installing powerline shell prompt..."
 git clone --recursive https://github.com/andresgongora/synth-shell-prompt.git
+chown -R user:user synth-shell-prompt
 synth-shell-prompt/setup.sh <<HEREDOC
 n
 HEREDOC
@@ -281,17 +288,13 @@ then
   echo "WARNING: couldn't clone dot-files"
   echo "Continuing..."
 else
+  chown -R user:user .dot-files
   cd .dot-files || exit \$?
 
-  ret_val=\$?
-  if [ \$ret_val -eq 0 ]
-  then
-    files=".bashrc .bash_aliases .profile .vimrc .gitconfig"
-    ln -f \${files} /home/user
-    ln -f foot.ini /home/user/.config/foot/foot.ini
-    ln -f synth-shell-prompt.config /home/user/.config/synth-shell/synth-shell-prompt.config
-  fi
-
+  files=".bashrc .bash_aliases .profile .vimrc .gitconfig"
+  ln -f \${files} /home/user
+  ln -f foot.ini /home/user/.config/foot/foot.ini
+  ln -f synth-shell-prompt.config /home/user/.config/synth-shell/synth-shell-prompt.config
   cp -r .vim /home/user
 fi
 
