@@ -96,20 +96,20 @@ then
   exit 1
 fi
 
-while [ "${password}" == "" ]
+while [ "${user_password}" == "" ]
 do
-  read -s -p "Set password for user: " password
+  read -s -p "Set password for user: " user_password
   echo
 
-  if [ "${password}" == "" ]
+  if [ "${user_password}" == "" ]
   then
     echo "WARNING: Password can't be empty"
   fi
 done
-read -s -p "One more time: " password2
+read -s -p "One more time: " user_password2
 echo
 
-if [ ! "${password}" == "${password2}" ]
+if [ ! "${user_password}" == "${user_password2}" ]
 then
   echo "ERROR: Passwords don't match"
   exit 1
@@ -232,7 +232,7 @@ echo -n "Adding user..."
 useradd -mG wheel user; err_check
 echo -n "Setting user password..."
 passwd -s user <<ENDPASS
-${password}
+${user_password}
 ENDPASS
 err_check
 
