@@ -8,13 +8,6 @@
 |   Swap    |   [SWAP]    |  4G  |
 |   Root    |    /mnt     | Rest |
 
-> [!IMPORTANT]
-> Make sure to mount the root partition before mounting the boot partition.
-
-## Locale
-
-en\_US.UTF-8
-
 ## Packages
 
 ### Notable Packages
@@ -32,9 +25,11 @@ en\_US.UTF-8
 ### Full Package List
 
 > [!NOTE]
-> Dependencies are not listed
+> Dependencies are not listed and some of these are groups
 
 asciiquarium \
+base \
+base-devel \
 cbonsai \
 cmatrix \
 foot \
