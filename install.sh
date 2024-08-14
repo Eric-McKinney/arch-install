@@ -240,6 +240,73 @@ echo -n "Backing up /etc/sudoers..."
 cp /etc/sudoers /etc/sudoers.bak; err_check
 echo -n "Setting wheel sudo permissions..."
 sed -ri 's/# (%wheel ALL=\(ALL:ALL\) ALL)/\1/' /etc/sudoers; err_check
+
+echo -n "Enabling 32-bit support..."
+sed -rzi 's|#(\[multilib\])\n#(Include = /etc/pacman.d/mirrorlist)|\1\n\2|' /etc/pacman.conf; err_check
+pacman -Syu
+
+echo "Installing yay..."
+cd /opt || exit \$?
+git clone https://aur.archlinux.org/yay-git.git
+chown -R user:user yay-git
+cd yay-git || exit \$?
+echo "${user_password}" | sudo -S --prompt="" true  # circumvent sudo prompt in makepkg
+makepkg -si --noconfirm
+
+echo "Installing powerline shell prompt..."
+git clone --recursive https://github.com/andresgongora/synth-shell-prompt.git
+synth-shell-prompt/setup.sh <<HEREDOC
+n
+HEREDOC
+
+echo "Setting up dotfiles..."
+cd /home/user || exit \$?
+git clone https://github.com/Eric-McKinney/dot-files.git .dot-files
+ret_val=\$?
+if [ \$ret_val -ne 0 ]
+then
+  echo "WARNING: couldn't clone dot-files"
+  echo "Continuing..."
+else
+  cd .dot-files || exit \$?
+
+  ret_val=\$?
+  if [ \$ret_val -eq 0 ]
+  then
+    files=".bashrc .bash_aliases .profile .vimrc .gitconfig"
+    ln -f \${files} /home/user
+    ln -f foot.ini /home/user/.config/foot/foot.ini
+    ln -f synth-shell-prompt.config /home/user/.config/synth-shell/synth-shell-prompt.config
+  fi
+
+  cp -r .vim /home/user
+fi
+
+# install gnome except for:
+#   gnome-tour, gvfs-afc, gvfs-dnssd, gvfs-goa, gvfs-onedrive, orca, simple-scan
+pacman -S --noconfirm baobab epiphany evince gdm gnome-backgrounds gnome-calculator gnome-calendar \
+  gnome-characters gnome-clocks gnome-color-manager gnome-connections gnome-console \
+  gnome-contacts gnome-control-center gnome-disk-utility gnome-font-viewer gnome-keyring \
+  gnome-logs gnome-maps gnome-menus gnome-music gnome-remote-desktop gnome-session \
+  gnome-settings-daemon gnome-shell gnome-shell-extensions gnome-software gnome-system-monitor \
+  gnome-text-editor gnome-user-docs gnome-user-share gnome-weather grilo-plugins gvfs gvfs-google \
+  gvfs-gphoto2 gvfs-mtp gvfs-nfs gvfs-smb gvfs-wsdd loupe malcontent nautilus rygel snapshot sushi \
+  tecla totem tracker3-miners xdg-desktop-portal-gnome xdg-user-dirs-gtk yelp
+
+systemctl enable gdm
+
+# from gnome-extra:
+# gnome-recipes - literally food recipes
+# gnome-sound-recorder - probably just use to see if my mic is working lol
+# gnome-tweaks - extra settings
+# seahorse - password and key manager
+pacman -S --noconfirm gnome-recipes gnome-sound-recorder gnome-tweaks seahorse
+
+# to enhance the terminal experience
+pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch
+
+# this is necessary
+neofetch
 ENDCMDS
 
 
