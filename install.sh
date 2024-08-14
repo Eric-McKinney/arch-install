@@ -133,6 +133,10 @@ then
 
   if [[ $REPLY =~ ^[yY]$ ]]
   then
+    echo -n "Unmounting disk..."
+    umount "${disk}*" 2> /dev/null; echo "done"
+    echo -n "Turning any swap on disk off..."
+    swapoff "${disk}*" 2> /dev/null; echo "done"
     echo "Wiping ${disk}..."
     dd if=/dev/urandom of="${disk}" bs=1M status=progress
     echo -ne "\033[6A\033[18Cdone\n\033[J"
