@@ -293,6 +293,7 @@ else
 
   files=".bashrc .bash_aliases .profile .vimrc .gitconfig"
   ln -f \${files} /home/user
+  mkdir -p /home/user/.config/foot
   ln -f foot.ini /home/user/.config/foot/foot.ini
   ln -f synth-shell-prompt.config /home/user/.config/synth-shell/synth-shell-prompt.config
   cp -r .vim /home/user
