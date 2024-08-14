@@ -12,13 +12,16 @@ usage()
 short_usage
 cat <<HEREDOC
 
-EXAMPLE
-    ${0##*/} /dev/sda
+DESCRIPTION
+    Before trusting this script, verify the steps are up to date by comparing against the arch wiki:
+    https://wiki.archlinux.org/title/Installation_guide
 
-Before trusting this script, verify the steps are up to date by comparing against the arch wiki.
-https://wiki.archlinux.org/title/Installation_guide
+    With the exception of prompting for passwords and what drive to use, this script automates the arch
+    linux install from partitioning to setting up my dot files.
 
-There is also always the easy way out: using archinstall.
+OPTIONS
+    --help, -h, -?
+        Display this help message and exit.
 HEREDOC
 }
 
