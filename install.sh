@@ -189,6 +189,9 @@ echo -n "  Turning swap (${swap_part}) on..."
 swapon "${swap_part}"; err_check
 echo -ne "\033[s\033[4A\033[22Cdone\033[u"
 
+echo -n "Moving images to root home directory..."
+mv img /mnt/root; err_check
+
 echo "Installing required packages..."
 pacstrap -K /mnt base base-devel linux linux-firmware man-db man-pages texinfo vim grub networkmanager git
 
@@ -212,6 +215,9 @@ systemctl enable NetworkManager > /dev/null 2>&1; err_check
 
 echo -n "Installing grub..."
 grub-install "${disk}" > /dev/null 2>&1; err_check
+echo -n "Configuring grub theme..."
+sed -ri 's|#(GRUB_BACKGROUND)=".*"|\1="/boot/grub/themes/dell-thunder.jpg"|' /etc/default/grub
+err_check
 echo -n "Making grub config..."
 grub-mkconfig -o /boot/grub/grub.cfg > /dev/null 2>&1; err_check
 
