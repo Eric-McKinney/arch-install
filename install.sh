@@ -215,11 +215,14 @@ systemctl enable NetworkManager > /dev/null 2>&1; err_check
 
 echo -n "Installing grub..."
 grub-install "${disk}" > /dev/null 2>&1; err_check
-echo -n "Configuring grub theme..."
+echo "Configuring grub theme..."
+echo -n "  Changing background..."
 mv /root/img/dell-thunder.jpg /boot/grub/themes
 sed -ri 's|#(GRUB_BACKGROUND)=".*"|\1="/boot/grub/themes/dell-thunder.jpg"|' /etc/default/grub
 err_check
+echo -n "  Changing resolution..."
 sed -ri 's/(GRUB_GFXMODE)=.*/\1=640x480/' /etc/default/grub; err_check
+echo -ne "\033[s\033[3A\033[25Cdone\033[u"
 echo -n "Making grub config..."
 grub-mkconfig -o /boot/grub/grub.cfg > /dev/null 2>&1; err_check
 
