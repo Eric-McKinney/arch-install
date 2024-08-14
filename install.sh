@@ -253,8 +253,8 @@ err_check
 
 echo -n "Changing ownership of wallpapers..."
 chown -R user:user /root/img; err_check
-echo -n "Moving wallpapers to user's home directory..."
-mv /root/img /home/user; err_check
+echo -n "Moving wallpapers to ~user/Pictures..."
+mv /root/img /home/user/Pictures/wallpapers; err_check
 
 echo -n "Backing up /etc/sudoers..."
 cp /etc/sudoers /etc/sudoers.bak; err_check
