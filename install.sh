@@ -219,7 +219,7 @@ echo -n "Configuring grub theme..."
 mv /root/img/dell-thunder.jpg /boot/grub/themes
 sed -ri 's|#(GRUB_BACKGROUND)=".*"|\1="/boot/grub/themes/dell-thunder.jpg"|' /etc/default/grub
 err_check
-sed -ri 's/(GRUB_GFXMODE)=.*/\1=640x480' /etc/default/grub; err_check
+sed -ri 's/(GRUB_GFXMODE)=.*/\1=640x480/' /etc/default/grub; err_check
 echo -n "Making grub config..."
 grub-mkconfig -o /boot/grub/grub.cfg > /dev/null 2>&1; err_check
 
