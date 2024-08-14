@@ -190,7 +190,8 @@ swapon "${swap_part}"; err_check
 echo -ne "\033[s\033[4A\033[22Cdone\033[u"
 
 echo -n "Moving images to root home directory..."
-mv img /mnt/root; err_check
+mkdir /mnt/root/img
+mv img/* /mnt/root/img; err_check
 
 echo "Installing required packages..."
 pacstrap -K /mnt base base-devel linux linux-firmware man-db man-pages texinfo vim grub networkmanager git
