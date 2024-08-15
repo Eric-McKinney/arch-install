@@ -273,18 +273,19 @@ cd /opt || exit \$?
 git clone https://aur.archlinux.org/yay-git.git
 chown -R user:user yay-git
 cd yay-git || exit \$?
+
+su user <<ENDUSERCMDS || exit \$?
 echo "${user_password}" | sudo -S --prompt="" true  # circumvent sudo prompt in makepkg
 makepkg -si --noconfirm
 
 echo "Installing powerline shell prompt..."
+cd /home/user || exit \$?
 git clone --recursive https://github.com/andresgongora/synth-shell-prompt.git
-chown -R user:user synth-shell-prompt
 synth-shell-prompt/setup.sh <<HEREDOC
 n
 HEREDOC
 
 echo "Setting up dotfiles..."
-cd /home/user || exit \$?
 git clone https://github.com/Eric-McKinney/dot-files.git .dot-files
 ret_val=\$?
 if [ \$ret_val -ne 0 ]
@@ -292,7 +293,6 @@ then
   echo "WARNING: couldn't clone dot-files"
   echo "Continuing..."
 else
-  chown -R user:user .dot-files
   cd .dot-files || exit \$?
 
   files=".bashrc .bash_aliases .profile .vimrc .gitconfig"
@@ -302,6 +302,7 @@ else
   ln -f synth-shell-prompt.config /home/user/.config/synth-shell/synth-shell-prompt.config
   cp -r .vim /home/user
 fi
+ENDUSERCMDS
 
 # install gnome except for:
 #   gnome-tour, gvfs-afc, gvfs-dnssd, gvfs-goa, gvfs-onedrive, orca, simple-scan
