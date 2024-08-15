@@ -99,6 +99,7 @@ then
   exit 1
 fi
 
+read -p "Name for new user: " user
 while [ "${user_password}" == "" ]
 do
   read -s -p "Set password for user: " user_password
@@ -247,17 +248,17 @@ ENDPASS
 err_check
 
 echo -n "Adding user..."
-useradd -mG wheel user; err_check
+useradd -mG wheel "${user}"; err_check
 echo -n "Setting user password..."
-passwd -s user <<ENDPASS
+passwd -s "${user}" <<ENDPASS
 ${user_password}
 ENDPASS
 err_check
 
 echo -n "Changing ownership of wallpapers..."
-chown -R user:user /root/img; err_check
+chown -R "${user}":"${user}" /root/img; err_check
 echo -n "Moving wallpapers to user's home directory..."
-mv /root/img /home/user/wallpapers; err_check
+mv /root/img /home/"${user}"/wallpapers; err_check
 
 echo -n "Backing up /etc/sudoers..."
 cp /etc/sudoers /etc/sudoers.bak; err_check
@@ -271,16 +272,16 @@ pacman -Syu
 echo "Installing yay..."
 cd /opt || exit \$?
 git clone https://aur.archlinux.org/yay-git.git
-chown -R user:user yay-git
+chown -R "${user}":"${user}" yay-git
 cd yay-git || exit \$?
 
-su user <<ENDUSERCMDS || exit \$?
+su "${user}" <<ENDUSERCMDS || exit \$?
 echo "${user_password}" | sudo -S --prompt="" true > /dev/null 2>&1  # circumvent sudo prompt in makepkg
 echo "Running makepkg..."
 makepkg -si --noconfirm
 
 echo "Installing powerline shell prompt..."
-cd /home/user || exit \\\$?  # two heredocs deep so gotta escape twice
+cd /home/"${user}" || exit \\\$?  # two heredocs deep so gotta escape twice
 git clone --recursive https://github.com/andresgongora/synth-shell-prompt.git
 synth-shell-prompt/setup.sh <<HEREDOC
 n
@@ -297,11 +298,11 @@ else
   cd .dot-files || exit \\\$?
 
   files=".bashrc .bash_aliases .profile .vimrc .gitconfig"
-  ln -f \\\${files} /home/user
-  mkdir -p /home/user/.config/foot
-  ln -f foot.ini /home/user/.config/foot/foot.ini
-  ln -f synth-shell-prompt.config /home/user/.config/synth-shell/synth-shell-prompt.config
-  cp -r .vim /home/user
+  ln -f \\\${files} /home/"${user}"
+  mkdir -p /home/"${user}"/.config/foot
+  ln -f foot.ini /home/"${user}"/.config/foot/foot.ini
+  ln -f synth-shell-prompt.config /home/"${user}"/.config/synth-shell/synth-shell-prompt.config
+  cp -r .vim /home/"${user}"
 fi
 ENDUSERCMDS
 
