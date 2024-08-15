@@ -275,7 +275,8 @@ chown -R user:user yay-git
 cd yay-git || exit \$?
 
 su user <<ENDUSERCMDS || exit \$?
-echo "${user_password}" | sudo -S --prompt="" true  # circumvent sudo prompt in makepkg
+echo "${user_password}" | sudo -S --prompt="" true > /dev/null 2>&1  # circumvent sudo prompt in makepkg
+echo "Running makepkg..."
 makepkg -si --noconfirm
 
 echo "Installing powerline shell prompt..."
