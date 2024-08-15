@@ -28,22 +28,83 @@
 > Dependencies are not listed and some of these are groups
 
 asciiquarium \
+baobab \
 base \
 base-devel \
 cbonsai \
 cmatrix \
+epiphany \
+evince \
 foot \
+fzf \
+gdm \
 git \
-gnome \
+gnome-backgrounds \
+gnome-calculator \
+gnome-characters \
+gnome-clocks \
+gnome-color-manager \
+gnome-connections \
+gnome-console \
+gnome-contacts \
+gnome-control-center \
+gnome-disk-utility \
+gnome-font-viewer \
+gnome-keyring \
+gnome-logs \
+gnome-maps \
+gnome-menus \
+gnome-music \
+gnome-recipes \
+gnome-remote-desktop \
+gnome-session \
+gnome-settings-daemon \
+gnome-shell \
+gnome-shell-extensions \
+gnome-software \
+gnome-sound-recorder \
+gnome-system-monitor \
+gnome-text-editor \
+gnome-tweaks \
+gnome-user-docs \
+gnome-user-share \
+gnome-weather \
+grilo-plugins \
 grub \
+gvfs \
+gvfs-google \
+gvfs-gphoto2 \
+gvfs-mtp \
+gvfs-nfs \
+gvfs-smb \
+gvfs-wsdd \
+libsixel \
+linux \
+linux-firmware \
+loupe \
+malcontent \
 man-db \
 man-pages \
+nautilus \
 neofetch \
 networkmanager \
+rygel \
+seahorse \
+snapshot \
+sushi \
+tecla \
 texinfo \
+thefuck \
+totem \
+tracker3-miners \
+ttf-jetbrains-mono-nerd \
 vim \
 wayland \
-yay
+xdg-desktop-portal-gnome \
+xdg-user-dirs-gtk \
+yay \
+yelp \
+zoxide
 
 ## Gnome Settings
 
