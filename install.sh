@@ -279,7 +279,7 @@ echo "${user_password}" | sudo -S --prompt="" true  # circumvent sudo prompt in 
 makepkg -si --noconfirm
 
 echo "Installing powerline shell prompt..."
-cd /home/user || exit \$?
+cd /home/user || exit \\\$?  # two heredocs deep so gotta escape twice
 git clone --recursive https://github.com/andresgongora/synth-shell-prompt.git
 synth-shell-prompt/setup.sh <<HEREDOC
 n
@@ -287,16 +287,16 @@ HEREDOC
 
 echo "Setting up dotfiles..."
 git clone https://github.com/Eric-McKinney/dot-files.git .dot-files
-ret_val=\$?
-if [ \$ret_val -ne 0 ]
+ret_val=\\\$?
+if [ \\\$ret_val -ne 0 ]
 then
   echo "WARNING: couldn't clone dot-files"
   echo "Continuing..."
 else
-  cd .dot-files || exit \$?
+  cd .dot-files || exit \\\$?
 
   files=".bashrc .bash_aliases .profile .vimrc .gitconfig"
-  ln -f \${files} /home/user
+  ln -f \\\${files} /home/user
   mkdir -p /home/user/.config/foot
   ln -f foot.ini /home/user/.config/foot/foot.ini
   ln -f synth-shell-prompt.config /home/user/.config/synth-shell/synth-shell-prompt.config
