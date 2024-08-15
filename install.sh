@@ -325,7 +325,7 @@ systemctl enable gdm
 pacman -S --noconfirm gnome-recipes gnome-sound-recorder gnome-tweaks seahorse
 
 # to enhance the terminal experience
-pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch
+pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf thefuck
 
 # this is necessary
 neofetch
