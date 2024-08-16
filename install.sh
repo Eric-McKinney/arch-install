@@ -349,6 +349,7 @@ echo "done"
 echo "  Closing firefox..."
 pkill firefox > /dev/null 2>&1 && echo "done"
 ENDUSERCMDS
+profile_dir=\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release)
 echo -n "  Creating directories..."
 mkdir -p "\${profile_dir}"/chrome/img; err_check
 echo -n "  Creating hard link for css file..."
