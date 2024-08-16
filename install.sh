@@ -197,7 +197,7 @@ echo -n "Generating /etc/fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab; err_check
 
 echo -n "Moving images to root home directory..."
-mv img /mnt/root; err_check
+mv ~/arch-install/img /mnt/root; err_check
 
 arch-chroot /mnt /bin/bash <<ENDCMDS || exit $?
 err_check()
@@ -304,6 +304,9 @@ else
   ln -f synth-shell-prompt.config /home/"${user}"/.config/synth-shell/synth-shell-prompt.config
   cp -r .vim /home/"${user}"
 fi
+
+cd /home/"${user}"
+git clone https://github.com/junegunn/fzf-git.sh
 ENDUSERCMDS
 
 # install gnome except for:
@@ -347,8 +350,8 @@ do
 done
 sleep 2  # buffer a little bit to be safe
 echo "done"
-echo "  Closing firefox..."
-pkill firefox > /dev/null 2>&1 && echo "done"
+echo -n "  Closing firefox..."
+pkill firefox > /dev/null 2>&1; echo "done"
 ENDUSERCMDS
 profile_dir=\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release)
 echo -n "  Creating directories..."
