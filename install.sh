@@ -267,7 +267,7 @@ sed -ri 's/# (%wheel ALL=\(ALL:ALL\) ALL)/\1/' /etc/sudoers; err_check
 
 echo -n "Enabling 32-bit support..."
 sed -rzi 's|#(\[multilib\])\n#(Include = /etc/pacman.d/mirrorlist)|\1\n\2|' /etc/pacman.conf; err_check
-pacman -Syu
+pacman -Sy
 
 echo "Installing yay..."
 cd /opt || exit \$?
@@ -330,7 +330,24 @@ echo "Installing rust..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # extras
-pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf thefuck firefox
+pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf thefuck firefox glow
+
+# set up firefox background
+echo "Creating firefox config..."
+profile_dir=/home/"${user}"/.mozilla/firefox/*.default-release
+echo -n "  Creating directories..."
+mkdir "\${profile_dir}"/chrome "\${profile_dir}"/chrome/img; err_check
+echo -n "  Creating hard link for css file..."
+ln /home/user/.dot-files/userContent.css "\${profile_dir}"/chrome; err_check
+echo -n "  Copying wallpaper..."
+cp /home/user/wallpapers/moonlight_mountain_purple.jpg "\${profile_dir}"/img; err_check
+echo -n "  Fixing file ownership..."
+chown -R "${user}":"${user}" "\${profile_dir}"/chrome; err_check
+echo -ne "\033[s\033[4A\033[26Cdone\033[u"
+echo "INFO: for the changes to firefox wallpaper to apply, make the following change in about:config"
+echo "      toolkit.legacyUserProfileCustomizations.stylesheets = true"
+echo "      then restart firefox"
+echo "INFO: changes to about:config should sync with a firefox account, so signing in may be enough"
 
 # this is necessary
 neofetch
