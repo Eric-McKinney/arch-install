@@ -335,28 +335,26 @@ pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf 
 # set up firefox background
 echo "Creating firefox config..."
 su "${user}" <<ENDUSERCMDS
-echo "  Starting firefox in headless mode..."
-echo -n "  "
-firefox --headless > /dev/null 2>&1 &
+echo -n "  Starting firefox in headless mode..."
+firefox --headless > /dev/null 2>&1 & && echo "done"
 echo -n "  Waiting for profile directory to be created..."
-profile_dir=\\\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release)
+profile_dir=\\\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release 2> /dev/null)
 while [ ! -d "\\\${profile_dir}" ]
 do
   sleep 0.1
-  profile_dir=\\\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release)
+  profile_dir=\\\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release 2> /dev/null)
 done
 sleep 2  # buffer a little bit to be safe
 echo "done"
 echo "  Closing firefox..."
-echo -n "  "
-pkill firefox > /dev/null 2>&1
+pkill firefox > /dev/null 2>&1 && echo "done"
 ENDUSERCMDS
 echo -n "  Creating directories..."
 mkdir -p "\${profile_dir}"/chrome/img; err_check
 echo -n "  Creating hard link for css file..."
-ln /home/user/.dot-files/userContent.css "\${profile_dir}"/chrome; err_check
+ln /home/"${user}"/.dot-files/userContent.css "\${profile_dir}"/chrome; err_check
 echo -n "  Copying wallpaper..."
-cp /home/user/wallpapers/moonlight_mountain_purple.jpg "\${profile_dir}"/img; err_check
+cp /home/"${user}"/wallpapers/moonlight_mountain_purple.jpg "\${profile_dir}"/img; err_check
 echo -n "  Fixing file ownership..."
 chown -R "${user}":"${user}" "\${profile_dir}"/chrome; err_check
 echo "INFO: for the changes to firefox wallpaper to apply, make the following change in about:config"
