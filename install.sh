@@ -356,7 +356,7 @@ mkdir -p "\${profile_dir}"/chrome/img; err_check
 echo -n "  Creating hard link for css file..."
 ln /home/"${user}"/.dot-files/userContent.css "\${profile_dir}"/chrome; err_check
 echo -n "  Copying wallpaper..."
-cp /home/"${user}"/wallpapers/moonlight_mountain_purple.jpg "\${profile_dir}"/img; err_check
+cp /home/"${user}"/wallpapers/moonlight_mountain_purple.jpg "\${profile_dir}"/chrome/img; err_check
 echo -n "  Fixing file ownership..."
 chown -R "${user}":"${user}" "\${profile_dir}"/chrome; err_check
 echo "INFO: for the changes to firefox wallpaper to apply, make the following change in about:config"
