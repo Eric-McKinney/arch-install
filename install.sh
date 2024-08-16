@@ -336,7 +336,7 @@ pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf 
 echo "Creating firefox config..."
 profile_dir=/home/"${user}"/.mozilla/firefox/*.default-release
 echo -n "  Creating directories..."
-mkdir "\${profile_dir}"/chrome "\${profile_dir}"/chrome/img; err_check
+mkdir -p "\${profile_dir}"/chrome/img; err_check
 echo -n "  Creating hard link for css file..."
 ln /home/user/.dot-files/userContent.css "\${profile_dir}"/chrome; err_check
 echo -n "  Copying wallpaper..."
