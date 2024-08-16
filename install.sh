@@ -334,7 +334,21 @@ pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf 
 
 # set up firefox background
 echo "Creating firefox config..."
-profile_dir=/home/"${user}"/.mozilla/firefox/*.default-release
+echo "  Starting firefox in headless mode..."
+echo -n "  "
+firefox --headless > /dev/null 2>&1 &
+echo -n "  Waiting for profile directory to be created..."
+profile_dir=\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release)
+while [ ! -d "\${profile_dir}" ]
+do
+  sleep 0.1
+  profile_dir=\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release)
+done
+sleep 2  # buffer a little bit to be safe
+echo "done"
+echo "  Closing firefox..."
+echo -n "  "
+pkill firefox > /dev/null 2>&1
 echo -n "  Creating directories..."
 mkdir -p "\${profile_dir}"/chrome/img; err_check
 echo -n "  Creating hard link for css file..."
@@ -343,7 +357,6 @@ echo -n "  Copying wallpaper..."
 cp /home/user/wallpapers/moonlight_mountain_purple.jpg "\${profile_dir}"/img; err_check
 echo -n "  Fixing file ownership..."
 chown -R "${user}":"${user}" "\${profile_dir}"/chrome; err_check
-echo -ne "\033[s\033[4A\033[26Cdone\033[u"
 echo "INFO: for the changes to firefox wallpaper to apply, make the following change in about:config"
 echo "      toolkit.legacyUserProfileCustomizations.stylesheets = true"
 echo "      then restart firefox"
