@@ -336,7 +336,8 @@ pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf 
 echo "Creating firefox config..."
 su "${user}" <<ENDUSERCMDS
 echo -n "  Starting firefox in headless mode..."
-firefox --headless > /dev/null 2>&1 & && echo "done"
+firefox --headless > /dev/null 2>&1 &
+[ \\\$? -eq 0 ] && echo "done"
 echo -n "  Waiting for profile directory to be created..."
 profile_dir=\\\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release 2> /dev/null)
 while [ ! -d "\\\${profile_dir}" ]
