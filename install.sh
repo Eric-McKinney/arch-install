@@ -3,7 +3,7 @@
 short_usage()
 {
 cat <<HEREDOC
-usage: ${0##*/} [--help|-h|-?]
+usage: ${0##*/} [--help|-h|-?] [--logfile|-l FILE]
 HEREDOC
 }
 
@@ -20,8 +20,11 @@ DESCRIPTION
     linux install from partitioning to setting up my dot files.
 
 OPTIONS
-    --help, -h, -?
+    -h, -?, --help 
         Display this help message and exit.
+
+    -l, --logfile FILE
+        Log script outputs to FILE in addition to the terminal. It's the same as running "${0} |& tee FILE".
 HEREDOC
 }
 
@@ -42,6 +45,23 @@ do
   case "${curr_opt}" in
     --help|-h|-?)
       usage
+      exit 0
+      ;;
+
+    --logfile|-l)
+      shift
+
+      if [ ${#} -ne 0 ]
+      then
+        logfile="${1}"
+        shift
+      else
+        echo "ERROR: missing logfile after ${curr_opt}"
+        short_usage
+        exit 1
+      fi
+
+      ${0} |& tee "${logfile}"
       exit 0
       ;;
 
