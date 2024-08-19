@@ -333,7 +333,11 @@ echo "Installing rust..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # extras
-pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf thefuck firefox glow
+pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf thefuck firefox glow \
+  bat jq ripgrep fd wl-clipboard poppler ffmpegthumbnailer p7zip imagemagick yazi onefetch cargo
+
+# extras (AUR)
+yay -S --noconfirm spotify-player
 
 # set up firefox background
 echo "Creating firefox config..."
