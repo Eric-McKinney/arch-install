@@ -359,7 +359,7 @@ echo "${user_password}" | sudo -S --prompt="" true
 yay -S --noconfirm spotify-player
 
 # extras (flatpak)
-flatpak install -y com.discordapp.Discord discord
+flatpak install -y com.discordapp.Discord
 flatpak install -y spotify
 
 echo "Installing rust..."
