@@ -329,15 +329,22 @@ systemctl enable gdm
 # seahorse - password and key manager
 pacman -S --noconfirm gnome-recipes gnome-sound-recorder gnome-tweaks seahorse
 
-echo "Installing rust..."
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
 # extras
 pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf thefuck firefox glow \
-  bat jq ripgrep fd wl-clipboard poppler ffmpegthumbnailer p7zip imagemagick yazi onefetch cargo
+  bat jq ripgrep fd wl-clipboard poppler ffmpegthumbnailer p7zip imagemagick yazi onefetch
 
+su "${user}" <<ENDUSERCMDS
 # extras (AUR)
+echo "${user_password}" | sudo -S --prompt="" true
 yay -S --noconfirm spotify-player
+
+# extras (flatpak)
+flatpak install -y com.discordapp.Discord discord
+flatpak install -y spotify
+
+echo "Installing rust..."
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENDUSERCMDS
 
 # set up firefox background
 echo "Creating firefox config..."
