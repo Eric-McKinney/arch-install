@@ -1,9 +1,14 @@
 #!/bin/bash
 
+#
+# cmdline option defaults
+#
+noreboot=N
+
 short_usage()
 {
 cat <<HEREDOC
-usage: ${0##*/} [--help|-h|-?] [--logfile|-l FILE]
+usage: ${0##*/} [--help|-h|-?] [--logfile|-l FILE] [--noreboot|-n]
 HEREDOC
 }
 
@@ -24,7 +29,10 @@ OPTIONS
         Display this help message and exit.
 
     -l, --logfile FILE
-        Log script outputs to FILE in addition to the terminal. It's the same as running "${0} |& tee FILE".
+        Log script outputs to FILE in addition to the terminal. It's the same as running "${0} --noreboot |& tee FILE".
+
+    -n, --noreboot
+        Do not reboot once the install is complete.
 HEREDOC
 }
 
@@ -39,7 +47,7 @@ else
 fi
 }
 
-while [ ${#} -ne 1 ]
+while [ ${#} -ne 0 ]
 do
   curr_opt="${1}"
   case "${curr_opt}" in
@@ -61,18 +69,19 @@ do
         exit 1
       fi
 
-      ${0} |& tee "${logfile}"
+      ${0} --noreboot |& tee "${logfile}"
       exit 0
       ;;
 
-    -*)
-      echo "ERROR: unrecognized option \"${curr_opt}\""
-      short_usage
-      exit 1
+    --noreboot|-n)
+      shift
+      noreboot=Y
       ;;
 
     *)
-      break
+      echo "ERROR: unrecognized option \"${curr_opt}\""
+      short_usage
+      exit 1
       ;;
   esac
 done
@@ -407,12 +416,17 @@ echo -n "Unmounting partitions..."
 umount -R /mnt; err_check
 
 echo
-for i in {15..0}
-do
-  echo -ne "\rRebooting in ${i} seconds "
-  sleep 1
-done
+if [ ${noreboot} == Y ]
+then
+  echo "Install complete!"
+else
+  for i in {15..0}
+  do
+    echo -ne "\rRebooting in ${i} seconds "
+    sleep 1
+  done
 
-reboot
+  reboot
+fi
 
 # [EOF]
