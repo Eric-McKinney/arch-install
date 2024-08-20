@@ -51,7 +51,7 @@ while [ ${#} -ne 0 ]
 do
   curr_opt="${1}"
   case "${curr_opt}" in
-    --help|-h|-?)
+    --help|-h|-\?)
       usage
       exit 0
       ;;
