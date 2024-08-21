@@ -362,7 +362,7 @@ then
   mv "${logfile}" /mnt/home/"${user}"; err_check
   echo -n "Changing logfile owner to ${user}..."
 arch-chroot /mnt /bin/bash <<ENDCMDS
-chown "${user}":"${user}" /home/"${user}"/"${logfile}" || exit \$?
+chown "${user}":"${user}" /home/"${user}"/"${logfile##*/}" || exit \$?
 ENDCMDS
   err_check
 fi
