@@ -290,6 +290,7 @@ echo -n "Changing ownership of wallpapers..."
 chown -R "${user}":"${user}" /root/img; err_check
 echo -n "Moving wallpapers to user's home directory..."
 mv /root/img /home/"${user}"/wallpapers; err_check
+
 echo -n "Changing ownership of configure.sh..."
 chown "${user}":"${user}" /root/configure.sh; err_check
 echo -n "Moving configure.sh to user's home directory..."
@@ -299,6 +300,12 @@ echo -n "Backing up /etc/sudoers..."
 cp /etc/sudoers /etc/sudoers.bak; err_check
 echo -n "Setting wheel sudo permissions..."
 sed -ri 's/# (%wheel ALL=\(ALL:ALL\) ALL)/\1/' /etc/sudoers; err_check
+echo -n "Saving /etc/sudoers..."
+cp /etc/sudoers /etc/sudoers.real; err_check
+echo -n "Swapping /etc/sudoers with backup..."
+cp -f /etc/sudoers.bak /etc/sudoers; err_check
+echo -n "Setting temp wheel sudo permissions..."
+sed -ri 's/# (%wheel ALL=\(ALL:ALL\) NOPASSWD: ALL)/\1/' /etc/sudoers; err_check
 
 echo -n "Enabling 32-bit support..."
 sed -rzi 's|#(\[multilib\])\n#(Include = /etc/pacman.d/mirrorlist)|\1\n\2|' /etc/pacman.conf; err_check
@@ -311,7 +318,6 @@ chown -R "${user}":"${user}" yay-git
 cd yay-git || exit \$?
 
 su "${user}" <<ENDUSERCMDS || exit \$?
-echo "${user_password}" | sudo -S --prompt="" true > /dev/null 2>&1  # circumvent sudo prompt in makepkg
 echo "Running makepkg..."
 makepkg -si --noconfirm
 ENDUSERCMDS
@@ -341,13 +347,15 @@ pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf 
   bat jq ripgrep fd wl-clipboard poppler ffmpegthumbnailer p7zip imagemagick yazi onefetch
 
 su "${user}" <<ENDUSERCMDS
-# extras (AUR)
-echo "${user_password}" | sudo -S --prompt="" true
-yay -S --noconfirm spotify-player
-
 echo "Installing rust..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+# extras (AUR)
+yay -S --noconfirm spotify-player
 ENDUSERCMDS
+
+echo -n "Restoring wheel sudo permissions..."
+mv -f /etc/sudoers.real /etc/sudoers; err_check
 
 # this is necessary
 neofetch
