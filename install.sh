@@ -227,6 +227,8 @@ genfstab -U /mnt >> /mnt/etc/fstab; err_check
 
 echo -n "Moving images to root home directory..."
 mv ~/arch-install/img /mnt/root; err_check
+echo -n "Moving configure.sh to root home directory..."
+mv ~/arch-install/configure.sh /mnt/root; err_check
 
 arch-chroot /mnt /bin/bash <<ENDCMDS || exit $?
 err_check()
@@ -288,6 +290,10 @@ echo -n "Changing ownership of wallpapers..."
 chown -R "${user}":"${user}" /root/img; err_check
 echo -n "Moving wallpapers to user's home directory..."
 mv /root/img /home/"${user}"/wallpapers; err_check
+echo -n "Changing ownership of configure.sh..."
+chown "${user}":"${user}" /root/configure.sh; err_check
+echo -n "Moving configure.sh to user's home directory..."
+mv /root/configure.sh /home/"${user}"; err_check
 
 echo -n "Backing up /etc/sudoers..."
 cp /etc/sudoers /etc/sudoers.bak; err_check
@@ -308,34 +314,6 @@ su "${user}" <<ENDUSERCMDS || exit \$?
 echo "${user_password}" | sudo -S --prompt="" true > /dev/null 2>&1  # circumvent sudo prompt in makepkg
 echo "Running makepkg..."
 makepkg -si --noconfirm
-
-echo "Installing powerline shell prompt..."
-cd /home/"${user}" || exit \\\$?  # two heredocs deep so gotta escape twice
-git clone --recursive https://github.com/andresgongora/synth-shell-prompt.git
-synth-shell-prompt/setup.sh <<HEREDOC
-n
-HEREDOC
-
-echo "Setting up dotfiles..."
-git clone https://github.com/Eric-McKinney/dot-files.git .dot-files
-ret_val=\\\$?
-if [ \\\$ret_val -ne 0 ]
-then
-  echo "WARNING: couldn't clone dot-files"
-  echo "Continuing..."
-else
-  cd .dot-files || exit \\\$?
-
-  files=".bashrc .bash_aliases .profile .vimrc .gitconfig"
-  ln -f \\\${files} /home/"${user}"
-  mkdir -p /home/"${user}"/.config/foot
-  ln -f foot.ini /home/"${user}"/.config/foot/foot.ini
-  ln -f synth-shell-prompt.config /home/"${user}"/.config/synth-shell/synth-shell-prompt.config
-  cp -r .vim /home/"${user}"
-fi
-
-cd /home/"${user}"
-git clone https://github.com/junegunn/fzf-git.sh
 ENDUSERCMDS
 
 # install gnome except for:
@@ -367,45 +345,9 @@ su "${user}" <<ENDUSERCMDS
 echo "${user_password}" | sudo -S --prompt="" true
 yay -S --noconfirm spotify-player
 
-# extras (flatpak)
-flatpak install -y com.discordapp.Discord
-flatpak install -y spotify
-
 echo "Installing rust..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENDUSERCMDS
-
-# set up firefox background
-echo "Creating firefox config..."
-su "${user}" <<ENDUSERCMDS
-echo -n "  Starting firefox in headless mode..."
-firefox --headless > /dev/null 2>&1 &
-[ \\\$? -eq 0 ] && echo "done"
-echo -n "  Waiting for profile directory to be created..."
-profile_dir=\\\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release 2> /dev/null)
-while [ ! -d "\\\${profile_dir}" ]
-do
-  sleep 0.1
-  profile_dir=\\\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release 2> /dev/null)
-done
-sleep 2  # buffer a little bit to be safe
-echo "done"
-echo -n "  Closing firefox..."
-pkill firefox > /dev/null 2>&1; echo "done"
-ENDUSERCMDS
-profile_dir=\$(ls -d /home/"${user}"/.mozilla/firefox/*.default-release)
-echo -n "  Creating directories..."
-mkdir -p "\${profile_dir}"/chrome/img; err_check
-echo -n "  Creating hard link for css file..."
-ln /home/"${user}"/.dot-files/userContent.css "\${profile_dir}"/chrome; err_check
-echo -n "  Copying wallpaper..."
-cp /home/"${user}"/wallpapers/moonlight_mountain_purple.jpg "\${profile_dir}"/chrome/img; err_check
-echo -n "  Fixing file ownership..."
-chown -R "${user}":"${user}" "\${profile_dir}"/chrome; err_check
-echo "INFO: for the changes to firefox wallpaper to apply, make the following change in about:config"
-echo "      toolkit.legacyUserProfileCustomizations.stylesheets = true"
-echo "      then restart firefox"
-echo "INFO: changes to about:config should sync with a firefox account, so signing in may be enough"
 
 # this is necessary
 neofetch
