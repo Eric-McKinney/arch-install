@@ -58,7 +58,19 @@ do
   esac
 done
 
+err_check()
+{
+if [ $? -ne 0 ]
+then
+  echo "failed"
+  exit $?
+else
+  echo "done"
+fi
+}
+
 user="$(whoami)"
+read -s -p "[sudo] password for ${user}: " sudo_password
 
 echo "Installing powerline shell prompt..."
 cd /home/"${user}" || exit $?
