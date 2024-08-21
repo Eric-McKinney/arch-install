@@ -129,7 +129,7 @@ echo -ne "\033[s\033[4A\033[25Cdone\033[u"
 ENDSUDOCMDS
 
 # extras (flatpak)
-flatpak install -y com.discordapp.Discord spotify
+flatpak install -y com.discordapp.Discord com.spotify.Client
 
 # set up firefox background
 echo "Creating firefox config..."
