@@ -100,7 +100,9 @@ fi
 cd /home/"${user}"
 git clone https://github.com/junegunn/fzf-git.sh
 
-echo "${sudo_password}" | sudo -Si --prompt="" <<ENDSUDOCMDS
+echo "${sudo_password}" | sudo -S --prompt="" true
+sudo -i <<ENDSUDOCMDS
+${sudo_password}
 err_check()
 {
 if [ \$? -ne 0 ]
@@ -113,8 +115,10 @@ fi
 }
 
 echo "Configuring grub theme..."
+echo -n "  Changing background owner to root..."
+chown root:root /home/"${user}"/wallpapers/dell-thunder.jpg; err_check
 echo -n "  Changing background..."
-mv /home/"${user}"/img/dell-thunder.jpg /boot/grub/themes
+mv /home/"${user}"/wallpapers/dell-thunder.jpg /boot/grub/themes
 sed -ri 's|#(GRUB_BACKGROUND)=".*"|\1="/boot/grub/themes/dell-thunder.jpg"|' /etc/default/grub
 err_check
 echo -n "  Changing resolution..."
@@ -155,6 +159,10 @@ echo "INFO: for the changes to firefox wallpaper to apply, make the following ch
 echo "      toolkit.legacyUserProfileCustomizations.stylesheets = true"
 echo "      then restart firefox"
 echo "INFO: changes to about:config should sync with a firefox account, so signing in may be enough"
+
+echo
+echo -n "Moving wallpapers/ to ~/Pictures..."
+mv ~/wallpapers ~/Pictures; err_check
 
 echo
 echo "Configuration complete."
