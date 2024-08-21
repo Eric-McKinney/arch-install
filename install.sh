@@ -3,7 +3,10 @@
 #
 # cmdline option defaults
 #
-noreboot=N
+if [ "${noreboot}" == "" ]
+then
+  noreboot=N
+fi
 
 short_usage()
 {
@@ -69,7 +72,7 @@ do
         exit 1
       fi
 
-      ${0} --noreboot |& tee "${logfile}"
+      logfile="${logfile}" noreboot="${noreboot}" ${0} ${@} |& tee "${logfile}"
       exit 0
       ;;
 
@@ -353,6 +356,16 @@ mv -f /etc/sudoers.real /etc/sudoers; err_check
 neofetch
 ENDCMDS
 
+if [ ! "${logfile}" == "" ]
+then
+  echo -n "Moving logfile "${logfile}" to user's home directory..."
+  mv "${logfile}" /mnt/home/"${user}"; err_check
+  echo -n "Changing logfile owner to ${user}..."
+arch-chroot /mnt /bin/bash <<ENDCMDS
+chown "${user}":"${user}" /home/"${user}"/"${logfile}" || exit \$?
+ENDCMDS
+  err_check
+fi
 
 echo -n "Unmounting partitions..."
 umount -R /mnt; err_check
