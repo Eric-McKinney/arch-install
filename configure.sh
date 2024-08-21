@@ -88,6 +88,30 @@ fi
 cd /home/"${user}"
 git clone https://github.com/junegunn/fzf-git.sh
 
+echo "${sudo_password}" | sudo -Si --prompt="" <<ENDSUDOCMDS
+err_check()
+{
+if [ \$? -ne 0 ]
+then
+  echo "failed"
+  exit \$?
+else
+  echo "done"
+fi
+}
+
+echo "Configuring grub theme..."
+echo -n "  Changing background..."
+mv /home/"${user}"/img/dell-thunder.jpg /boot/grub/themes
+sed -ri 's|#(GRUB_BACKGROUND)=".*"|\1="/boot/grub/themes/dell-thunder.jpg"|' /etc/default/grub
+err_check
+echo -n "  Changing resolution..."
+sed -ri 's/(GRUB_GFXMODE)=.*/\1=640x480/' /etc/default/grub; err_check
+echo -n "  Making grub config..."
+grub-mkconfig -o /boot/grub/grub.cfg > /dev/null 2>&1; err_check
+echo -ne "\033[s\033[4A\033[25Cdone\033[u"
+ENDSUDOCMDS
+
 # extras (flatpak)
 flatpak install -y com.discordapp.Discord spotify
 
