@@ -71,6 +71,7 @@ fi
 
 user="$(whoami)"
 read -s -p "[sudo] password for ${user}: " sudo_password
+echo
 
 echo "Installing powerline shell prompt..."
 cd /home/"${user}" || exit $?
@@ -100,9 +101,8 @@ fi
 cd /home/"${user}"
 git clone https://github.com/junegunn/fzf-git.sh
 
-echo "${sudo_password}" | sudo -S --prompt="" true
+echo "${sudo_password}" | sudo -S --prompt="" true > /dev/null 2>&1
 sudo -i <<ENDSUDOCMDS
-${sudo_password}
 err_check()
 {
 if [ \$? -ne 0 ]
