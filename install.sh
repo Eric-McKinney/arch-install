@@ -339,14 +339,14 @@ pacman -S --noconfirm gnome-recipes gnome-sound-recorder gnome-tweaks seahorse
 
 # extras
 pacman -S --noconfirm foot ttf-jetbrains-mono-nerd libsixel neofetch zoxide fzf thefuck firefox glow \
-  bat jq ripgrep fd wl-clipboard poppler ffmpegthumbnailer p7zip imagemagick yazi onefetch
+  bat jq ripgrep fd wl-clipboard poppler ffmpegthumbnailer p7zip imagemagick yazi onefetch tldr
 
 su "${user}" <<ENDUSERCMDS
 echo "Installing rust..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # extras (AUR)
-yay -S --noconfirm spotify-player
+yay -S --noconfirm spotify-player-full-pipe
 ENDUSERCMDS
 
 echo -n "Restoring wheel sudo permissions..."
