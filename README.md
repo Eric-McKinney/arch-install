@@ -1,5 +1,10 @@
 # My Arch Install
 
+## Disclaimer
+
+This install and configure script have only been tested successfully on a VirtualBox VM.
+On real hardware the likelihood that this script succeeds is very low unfortunately.
+
 ## Partitions
 
 | Partition | Mount Point | Size |
