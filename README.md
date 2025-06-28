@@ -1,9 +1,11 @@
 # My Arch Install
 
-## Disclaimer
+## Disclaimer ⚠
 
-This install and configure script have only been tested successfully on a VirtualBox VM.
-On real hardware the likelihood that this script succeeds is very low unfortunately.
+I've dropped this project in favor of using NixOS ([see
+here](https://github.com/eric-mckinney/nixos-config)). At bare minimum the
+configure script won't work because I've restructured my dot files, but don't
+expect anything to work.
 
 ## Partitions
 
